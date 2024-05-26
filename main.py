@@ -44,19 +44,30 @@ def spotify_callback(code: str):
             # Realizar otra búsqueda para obtener las imágenes de las canciones recomendadas
             songs_with_images = []
             for song in recomendaciones:
-                # Realizar búsqueda en Spotify para obtener la información de la canción
                 results = sp.search(q=f"track:{song}", type='track', limit=1)
                 if results['tracks']['items']:
                     track_info = results['tracks']['items'][0]
                     if 'album' in track_info and 'images' in track_info['album'] and len(track_info['album']['images']) > 0:
-                        # La URL de la imagen del álbum se encuentra en la primera imagen (generalmente la más grande)
                         image_url = track_info['album']['images'][0]['url']
                         song_url = track_info['external_urls']['spotify']
                         song_name = track_info['name']
                         artists = track_info['artists']
-                        # Extraer el nombre del primer artista de la lista
                         artist_name = artists[0]['name']
-                        songs_with_images.append({'name': song_name,"artist":artist_name, 'image_url': image_url,"song_url":song_url})
+                        album_name = track_info['album']['name']
+                        duration_ms = track_info['duration_ms']
+                        # Convert duration from milliseconds to minutes and seconds
+                        duration_min_sec = f"{duration_ms // 60000}:{(duration_ms // 1000) % 60:02d}"
+                        genres = sp.artist(artists[0]['id'])['genres'] if artists else []
+
+                        songs_with_images.append({
+                            'name': song_name,
+                            "artist": artist_name,
+                            'image_url': image_url,
+                            "song_url": song_url,
+                            "album": album_name,
+                            "duration": duration_min_sec,
+                            "genres": genres
+                        })
 
             return JSONResponse(content={"recommendation": recomendaciones, "songs_with_images": songs_with_images})
         else:

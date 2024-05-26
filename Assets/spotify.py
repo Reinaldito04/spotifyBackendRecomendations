@@ -2,11 +2,15 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.oauth2 import SpotifyClientCredentials
 from Assets.geminiClient import GeminiAi
+from dotenv import load_dotenv
+import os
 
-client_id = 'e32f36ccf36b47f38b4b0f4e01035da1'
-client_secret = '2241a63850534326aadfd7d737607423'
+load_dotenv()
+
+client_id = os.getenv('clientID')
+client_secret = os.getenv('clientSecret')
 # Debes añadir esta URL en la configuración de tu app en Spotify
-redirect_uri = 'http://localhost:5173/'
+redirect_uri = 'https://6jjvf5b7-5173.use2.devtunnels.ms/recomendations'
 
 scope = 'user-read-recently-played'
 
