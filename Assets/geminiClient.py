@@ -1,8 +1,11 @@
 
 import google.generativeai as genAi
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
-API='AIzaSyCxPvCYyT0yFHimTCEhsRYXEZadGlGJVQs'
+API= os.getenv('GeminiApiKey')
 
 
 class GeminiAi:
